@@ -13,7 +13,7 @@ def checkItem(data):
 
 
 def ItemDataSchema(data):
-	# Создаем Json формат, лучше использовать marshmallow, если бы это было приложение
+	# Создаем Json формат, лучше использовать marshmallow, если бы это было приложение для продакшена
 	return {
 		"id": data.get('id'),
 		"email_hash": data.get('hash'),
@@ -79,6 +79,8 @@ class DataResource(Resource):
 		name = data[: data.find("@")]
 		url = f'https://ru.gravatar.com/{name}.json'
 		r = requests.get(url)
+
+		# Проверка на статус
 		if r.status_code == 404:
 			return {"error": "User not found"}
 
@@ -86,6 +88,11 @@ class DataResource(Resource):
 			return {"error": "Unexpected error"}
 
 		hash_object_data = r.json().get('entry')
+
+		"""В ответе от сервера изначально стоит список entry, 
+		так или иначе он всего один и по этому мы берем значения от нуля"""
+
 		data = hash_object_data[0]
-		
+
+
 		return ItemDataSchema(data)
