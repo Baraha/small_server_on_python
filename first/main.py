@@ -1,5 +1,5 @@
-import pip
-pip.main(['install', '-r', 'requirements.txt'])
+#import pip
+#pip.main(['install', '-r', 'requirements.txt'])
 
 from app import create_app
 
